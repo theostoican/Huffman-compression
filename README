@@ -1,0 +1,40 @@
+README
+
+/*
+	Theodor Stoican
+	313CA
+*/
+
+Fisiere sursa: Huffmanencoder.cpp Huffmanserialized.cpp ReadAndWriteBits.cpp 
+
+Fisiere header : HuffNode.h heap.h
+
+Tema 4 a fost o tema care mi s-a parut initial interesanta, ulterior groaznica, dupa care mi s-a parut iarasi
+foarte interesanta, dupa ce am codificat un fisier mai mare si am verificat dimensiunile (semnificativ diferite). 
+La Fur_Elise, diferenta era de 5 MB. Nu m-a impresionat initial, pana nu am testat eu insumi.
+
+Cele mai mari probleme in implementare au provenit din Heap si din functiile de codificare a textului (operatii 
+pe biti). Am avut ,cred, 7 variante de pushDown, 4 metode de calculare a reprezentantului si peste 1100 de linii 
+de cod scrise (cu tot cu comentarii, bineinteles). In final, am obtinut un pushDown care functioneaza, iar 
+reprezentantul unui nod e retinut in variabila symbol, aferenta structurii Node si calculat inca din main, pentru 
+a nu fi nevoie sa implementez o functie recursiva care il calculeaza(toate variantele bazate pe asta pe care le-
+am construit au esuat lamentabil). Varianta finala e o functie compare, care compara doua noduri (fie tata-fiu,
+fie 2 frati) in functie de conditiile mentionate in enunt. Nodurile sunt membri ai structurii Node, care va
+depozita arborele Huffman, dupa ce va fi creat. Pentru a calcula frecventele aparitiei unui caracter in text, 
+folosesc un vector de 256 elemente, initializat la inceput cu 0, pentru ca, la fiecare pas, sa incrementez
+valoarea din vector corespunzatoare caracterului citit. Astfel, indicele in vector este dat de codul ASCII al
+unui caracter.
+
+Pentru a crea vectorul de structuri Huffmanserializednode, folosesc, asa cum se specifica in enunt, o parcurgere
+in preordine, cu mentiunea ca pastrez o referinta catre index, pentru a-i pastra valabilitatea de-a lungul apelu-
+lilor recursive si o variabila current, locala, utila in momentul revenirii inapoi, la un anumit pas, din recursi-
+vitate. Pentru a codifica fiecare caracter, folosesc functia generateCode, care functioneaza, de asemenea, 
+recursiv si care mentine codul intr-o variabila de tip uint32_t. O greseala pe care am facut-o a fost sa folosesc
+o variabila de dimensiune mai mica si, astfel, pentru fisiere mari, functia sa nu functioneze. Prin code<<1, 
+adaug un bit "0", iar prin code<<1 | 1, adaug un bit "1" in cadrul octetului.Partea de codificare a textului este 
+realizate in cadrul functie BitString, care imi parcurge textul caracter cu caracter si creeaza octeti, ca in
+exemplul din enunt, dupa care ii printeaza direct in fisier. Cazul particular, studiant in afara loop-ului for, a 
+constat in partea de padding.
+
+Finalul, partea de decompresie, a fost destul de facil, intrucat tot ce a trebuit sa fac a fost sa parcurg textul 
+codificat, octet cu octet, si sa decodific bitii respectivi, parcurgand arborele Huffman.
